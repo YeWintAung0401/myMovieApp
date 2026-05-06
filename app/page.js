@@ -8,7 +8,7 @@ const BANNERS = [
     rating: "9.8",
     genres: ["Action", "Drama", "Comedy"],
     description: "A brilliant scientist discovers a way to harness the power of the ocean's currents to create a new, renewable energy source. But when her groundbreaking technology falls into the wrong hands, she must race against time.",
-    image: "/homebanner.jpg", // Ensure this exists in your /public folder
+    image: "/homebanner.jpg", 
   },
   {
     id: 2,
@@ -16,7 +16,7 @@ const BANNERS = [
     rating: "8.5",
     genres: ["Sci-Fi", "Thriller", "Mystery"],
     description: "During a perilous 24-hour mission on the moon, space explorers attempt to retrieve samples from an abandoned research facility steeped in classified secrets.",
-    image: "/homebanner2.jpg", // Add your secondary image to /public
+    image: "/homebanner2.jpg", 
   },
   {
     id: 3,
@@ -24,7 +24,7 @@ const BANNERS = [
     rating: "9.1",
     genres: ["Adventure", "Fantasy"],
     description: "In a world divided by magic and machinery, a young mechanic accidental unearths a legendary mechanized titan, igniting a war of global proportions.",
-    image: "/homebanner3.jpg", // Add your third image to /public
+    image: "/homebanner3.jpg", 
   }
 ];
 
