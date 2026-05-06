@@ -10,9 +10,9 @@ export default function Layout({ children }) {
 
   return (
     <>
-      {!hideLayout && <Header />}
-      {children}
-      {!hideLayout && <Footer />}
+      <Header />
+        {children}
+      <Footer />
     </>
   );
 }

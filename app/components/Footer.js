@@ -14,7 +14,7 @@ const Footer = () => {
         </div>
         <div className="text-gray-500 text-xs text-center md:text-left">
           <p>© HOTFLIX, 2019—2026</p>
-          <p>Created by <span className="text-[#ff55a5] hover:underline cursor-pointer">Dmitry Volkov</span></p>
+          <p>Created by <span className="text-[#ff55a5] hover:underline cursor-pointer">Mask X</span></p>
         </div>
       </div>
 
