@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
 
 
 export default function RootLayout({ children }) {
-  
+
   const pathname = usePathname();
   const hideLayout = pathname === "/signin" || pathname === "/signup";
 
@@ -26,6 +26,15 @@ export default function RootLayout({ children }) {
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
+
+      <head>
+        <link
+          rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+          precedence="default"
+        />
+      </head>
+
       <body className="min-h-full flex flex-col" suppressHydrationWarning>
         {!hideLayout && <Header />}
         <main className="flex-grow">

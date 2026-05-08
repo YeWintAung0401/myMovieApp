@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const BANNERS = [
   {
@@ -8,7 +8,7 @@ const BANNERS = [
     rating: "9.8",
     genres: ["Action", "Drama", "Comedy"],
     description: "A brilliant scientist discovers a way to harness the power of the ocean's currents to create a new, renewable energy source. But when her groundbreaking technology falls into the wrong hands, she must race against time.",
-    image: "/homebanner.jpg", 
+    image: "/homebanner.jpg",
   },
   {
     id: 2,
@@ -16,7 +16,7 @@ const BANNERS = [
     rating: "8.5",
     genres: ["Sci-Fi", "Thriller", "Mystery"],
     description: "During a perilous 24-hour mission on the moon, space explorers attempt to retrieve samples from an abandoned research facility steeped in classified secrets.",
-    image: "/homebanner2.jpg", 
+    image: "/homebanner2.jpg",
   },
   {
     id: 3,
@@ -24,118 +24,119 @@ const BANNERS = [
     rating: "9.1",
     genres: ["Adventure", "Fantasy"],
     description: "In a world divided by magic and machinery, a young mechanic accidental unearths a legendary mechanized titan, igniting a war of global proportions.",
-    image: "/homebanner3.jpg", 
+    image: "/homebanner3.jpg",
   }
 ];
 
 const page = () => {
 
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isAnimating, setIsAnimating] = useState(false);
+
+  // Auto-slide effect (Optional, but modern)
+  useEffect(() => {
+    const timer = setInterval(handleNext, 8000);
+    return () => clearInterval(timer);
+  }, [currentIndex]);
 
   const handleNext = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % BANNERS.length);
+    setIsAnimating(true);
+    setTimeout(() => {
+      setCurrentIndex((prev) => (prev + 1) % BANNERS.length);
+      setIsAnimating(false);
+    }, 300);
   };
 
   const handlePrev = () => {
-    setCurrentIndex((prevIndex) => (prevIndex - 1 + BANNERS.length) % BANNERS.length);
+    setIsAnimating(true);
+    setTimeout(() => {
+      setCurrentIndex((prev) => (prev - 1 + BANNERS.length) % BANNERS.length);
+      setIsAnimating(false);
+    }, 300);
   };
 
   const currentBanner = BANNERS[currentIndex];
-  
+
   return (
-  <div className="flex flex-col items-center justify-center py-6 px-4 md:px-8 lg:px-12 min-h-[calc(100vh-200px)] bg-[#1a191f]">
-      
-    {/* Responsive Hero Container */}
-    <section className="relative w-full max-w-7xl h-100vh sm:h-[500px] md:h-[600px] overflow-hidden rounded-3xl group shadow-2xl">
+    <div className="h-full bg-[#0b0b0e] flex flex-col items-center justify-center p-4 md:p-8">
           
-      {/* Background Image Layer */}
-      <div 
-        className="absolute inset-0 bg-cover bg-center transition-all duration-1000 group-hover:scale-105"
-        style={{ 
-          backgroundImage: `url('${currentBanner.image}')`, 
-        }}
-      >
-        {/* Multi-stage Overlay for Readability */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#1a191f] via-[#1a191f]/70 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#1a191f]/80 via-transparent to-transparent md:hidden" />
+    {/* Container: Stacked on Mobile, Relative/Absolute on Desktop */}
+    <section className="w-full lg:max-w-[1400px] flex flex-col md:relative md:h-[650px] lg:mt-8 lg:rounded-[2.5rem] overflow-hidden bg-[#0b0b0e] border-white/5 lg:border">
+        
+      {/* 1. Image Layer: Top of the stack on mobile */}
+      <div className="relative w-full h-[45vh] md:absolute md:inset-0 md:h-full">
+        <div 
+          className="w-full h-full bg-cover bg-center transition-all duration-700"
+          style={{ backgroundImage: `url('${currentBanner.image}')` }}
+        >
+          {/* Desktop-only Gradient */}
+          <div className="hidden md:block absolute inset-0 bg-gradient-to-r from-[#0b0b0e] via-[#0b0b0e]/50 to-transparent" />
+          {/* Mobile-only Bottom Fade (smoothes transition to content layer) */}
+          <div className="md:hidden absolute inset-0 bg-gradient-to-t from-[#0b0b0e] to-transparent" />
+        </div>
+          
+        {/* Mobile Rating Badge (Floating over image) */}
+        <div className="absolute top-4 right-4 md:hidden px-3 py-1 bg-green-500 rounded-lg text-black font-bold text-xs">
+          {currentBanner.rating}
+        </div>
       </div>
 
-      {/* Content Layer: Centered vertically, responsive alignment */}
-      <div className="relative h-full w-full flex flex-col justify-center px-6 sm:px-10 md:px-16">
-        <div className="max-w-2xl space-y-4 md:space-y-6">
-              
-          {/* Title & Rating */}
-          <div className="flex flex-wrap items-center gap-3 md:gap-5">
-            <h1 className="text-3xl sm:text-4xl md:text-6xl font-extrabold text-white tracking-tight drop-shadow-md">
-              {currentBanner.title}
-            </h1>
-            <div className="flex items-center justify-center w-10 h-10 md:w-12 md:h-12 border-2 border-green-500 rounded-full bg-[#1a191f]/50 backdrop-blur-sm">
-              <span className="text-white text-xs md:text-sm font-bold">{currentBanner.rating}</span>
+      {/* 2. Content Layer: Under the image on mobile */}
+      <div className="relative flex flex-col px-6 py-8 md:h-full md:justify-center md:px-20 md:py-0 z-10">
+          
+        <div className="max-w-2xl space-y-4">
+          {/* Hidden on desktop, shown on mobile for visual separation */}
+          <div className="md:hidden w-12 h-1 bg-[#ff55a5] rounded-full mb-2" />
+
+          <h1 className="text-4xl md:text-7xl font-black text-white tracking-tighter uppercase leading-none">
+            {currentBanner.title}
+          </h1>
+
+          <div className="flex flex-wrap items-center gap-3">
+            <div className="hidden md:flex items-center justify-center w-10 h-10 border border-green-500 rounded-full text-green-500 font-bold text-xs">
+              {currentBanner.rating}
             </div>
+            <p className="text-[#ff55a5] font-bold text-xs md:text-sm tracking-widest uppercase">
+              {currentBanner.genres.join(' • ')}
+            </p>
           </div>
 
-          {/* Meta Info */}
-          <div className="flex items-center gap-2 text-[#ff55a5] text-xs md:text-sm font-semibold tracking-wide">
-            {currentBanner.genres.map((genre, idx) => (
-              <React.Fragment key={genre}>
-                <span>{genre}</span>
-                {idx < currentBanner.genres.length - 1 && <span className="text-gray-500">•</span>}
-              </React.Fragment>
-            ))}
-          </div>
-
-          {/* Description: Clamped for small screens */}
-          <p className="text-gray-300 text-sm md:text-lg leading-relaxed max-w-lg line-clamp-3 md:line-clamp-none min-h-[80px]">
+          <p className="text-gray-400 text-sm md:text-lg leading-relaxed md:max-w-lg">
             {currentBanner.description}
           </p>
 
-          {/* Action Section */}
-          <div className="pt-4 flex flex-col sm:flex-row gap-4">
-            <button className="w-full sm:w-auto px-10 py-3.5 border-2 border-[#ff55a5] text-[#ff55a5] rounded-xl font-bold tracking-[0.2em] hover:bg-[#ff55a5] hover:text-white transition-all duration-300 shadow-[0_0_20px_rgba(255,85,165,0.25)] uppercase text-sm">
-              Watch Now
+          {/* Action Buttons */}
+          <div className="flex flex-col sm:flex-row gap-4 pt-4 md:pt-6">
+            <button className="flex-1 sm:flex-none px-10 py-4 bg-[#ff55a5] text-white rounded-2xl font-black uppercase tracking-widest text-xs hover:shadow-[0_0_20px_rgba(255,85,165,0.4)] transition-all active:scale-95">
+              <i className="fa-solid fa-play mr-2"></i> Play Now
+            </button>
+            <button className="flex-1 sm:flex-none px-10 py-4 bg-white/5 border border-white/10 text-white rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-white/10 transition-all">
+              <i className="fa-solid fa-plus mr-2"></i> My List
             </button>
           </div>
         </div>
 
-        {/* Controls: Next/Prev Buttons and Pagination dots */}
-        <div className="hidden sm:flex absolute bottom-8 left-6 sm:left-10 md:left-16 items-center gap-6">
+        {/* 3. Controls Layer */}
+        <div className="mt-12 md:mt-0 md:absolute md:bottom-10 md:right-20 flex items-center justify-between md:justify-end gap-6">
+            
+          {/* Navigation Buttons */}
           <div className="flex gap-3">
-            {/* Prev Button */}
-            <button 
-              onClick={handlePrev}
-              className="w-11 h-11 bg-white/5 hover:bg-white/20 border border-white/10 rounded-xl flex items-center justify-center transition-all backdrop-blur-md active:scale-95"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
-              </svg>
+            <button onClick={handlePrev} className="w-12 h-12 rounded-full border border-white/10 bg-white/5 flex items-center justify-center text-white hover:bg-[#ff55a5] transition-all">
+              <i className="fa-solid fa-chevron-left"></i>
             </button>
-              
-            {/* Next Button */}
-            <button 
-              onClick={handleNext}
-              className="w-11 h-11 bg-white/5 hover:bg-white/20 border border-white/10 rounded-xl flex items-center justify-center transition-all backdrop-blur-md active:scale-95"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
-              </svg>
+            <button onClick={handleNext} className="w-12 h-12 rounded-full border border-white/10 bg-white/5 flex items-center justify-center text-white hover:bg-[#ff55a5] transition-all">
+              <i className="fa-solid fa-chevron-right"></i>
             </button>
           </div>
-              
-          {/* Dynamic Pagination Dots */}
-          <div className="flex gap-2.5 items-center">
-            {BANNERS.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setCurrentIndex(index)}
-                className={`transition-all duration-300 rounded-full ${
-                  index === currentIndex 
-                    ? "w-6 h-1.5 bg-[#ff55a5]" 
-                    : "w-1.5 h-1.5 bg-white/20 hover:bg-white/40"
-                }`}
-              />
+
+          {/* Dots */}
+          <div className="flex gap-2">
+            {BANNERS.map((_, i) => (
+              <div key={i} className={`h-1.5 rounded-full transition-all duration-300 ${i === currentIndex ? 'w-8 bg-[#ff55a5]' : 'w-2 bg-white/20'}`} />
             ))}
           </div>
         </div>
+
       </div>
     </section>
   </div>
